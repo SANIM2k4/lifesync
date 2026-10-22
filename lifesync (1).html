@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LifeSync – দৈনিক ট্র্যাকার</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f6f2; --surface: #ffffff; --ink: #16241d; --muted: #6b7a71; --line: #e1e7e1;
+    --green: #1f5c42; --green-soft: #e3efe8; --gold: #b98a2e; --rose: #c4515f; --blue: #3c6e9e; --sleep: #8f86b8;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1713; --surface: #17211b; --ink: #e8efe9; --muted: #8fa196;
+      --line: #263329; --green: #5fbf8f; --green-soft: #1d3326;
+      --gold: #d9a94a; --rose: #e07a86; --blue: #6fa3d6; --sleep: #a79fd0;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Hind Siliguri", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; padding: 24px 16px 48px; }
+  .wrap { max-width: 920px; margin: 0 auto; }
+
+  header { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.01em; }
+  header p { color: var(--muted); font-size: .9rem; }
+  .date { text-align: right; font-size: .9rem; color: var(--muted); }
+  .date b { display: block; color: var(--ink); font-weight: 600; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .grid { grid-template-columns: 1.15fr 1fr; align-items: start; } }
+  .stack { display: grid; gap: 16px; }
+
+  .score { display: flex; align-items: center; gap: 22px; }
+  .ring { position: relative; width: 132px; height: 132px; flex: none; }
+  .ring svg { transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 10; }
+  .ring .track { stroke: var(--line); }
+  .ring .bar { stroke: var(--green); stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+  .ring .num { position: absolute; inset: 0; display: grid; place-items: center; font-size: 2rem; font-weight: 700; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; flex: 1; }
+  .facts small { display: block; color: var(--muted); font-size: .78rem; }
+  .facts strong { font-size: 1.15rem; font-weight: 600; }
+  #status { margin-top: 14px; font-size: .85rem; color: var(--muted); }
+
+  .group { margin-bottom: 22px; }
+  .group:last-of-type { margin-bottom: 0; }
+  .label { font-size: .85rem; color: var(--muted); margin-bottom: 10px; display: flex; justify-content: space-between; }
+
+  .prayers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .chip span { display: block; text-align: center; padding: 12px 4px; font-size: .9rem; font-weight: 500; border: 1px solid var(--line); border-radius: 10px; transition: .15s; }
+  .chip input:checked + span { background: var(--green); border-color: var(--green); color: var(--surface); }
+  .chip input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .habits { display: grid; gap: 8px; }
+  .habits .chip span { text-align: left; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .habits .chip span::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--muted); }
+  .habits .chip input:checked + span::after { background: var(--surface); border-color: var(--surface); box-shadow: inset 0 0 0 3px var(--green); }
+
+  .hours { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .hours label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 4px; }
+  input[type=number] { width: 100%; padding: 10px 12px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+  input[type=number]:focus { outline: 2px solid var(--green); border-color: transparent; }
+
+  /* দান */
+  .donate { display: flex; align-items: center; gap: 10px; }
+  .donate .tk { font-weight: 600; color: var(--gold); font-size: 1.1rem; }
+  .quick { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .quick button { width: auto; margin: 0; padding: 5px 12px; font-size: .8rem; font-weight: 500; background: var(--green-soft); color: var(--green); border-radius: 8px; }
+
+  button { width: 100%; margin-top: 24px; padding: 13px; font: inherit; font-weight: 600; cursor: pointer; background: var(--green); color: var(--surface); border: 0; border-radius: 10px; transition: opacity .15s; }
+  button:hover { opacity: .9; }
+  button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  #week { display: flex; align-items: end; gap: 10px; height: 150px; }
+  .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: end; height: 100%; gap: 6px; font-size: .75rem; color: var(--muted); }
+  .col i { display: block; width: 100%; max-width: 34px; border-radius: 6px 6px 0 0; background: var(--green-soft); min-height: 3px; }
+  .col.today i { background: var(--green); }
+  .col em { font-style: normal; color: var(--ink); font-weight: 600; }
+
+  #split { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--line); }
+  #split div { transition: width .4s ease; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-top: 14px; font-size: .85rem; }
+  .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--c); }
+
+  /* ৭ দিনের হিস্টরি */
+  .sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .sum div { background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+  .sum small { display: block; color: var(--muted); font-size: .75rem; }
+  .sum strong { font-size: 1.05rem; font-weight: 600; }
+  .tw { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; min-width: 420px; }
+  th, td { text-align: center; padding: 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; font-size: .78rem; }
+  td:first-child, th:first-child { text-align: left; }
+  tr.empty td { color: var(--muted); }
+  tr.today td:first-child { color: var(--green); font-weight: 600; }
+
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 10px; font-size: .9rem; transition: .25s; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>LifeSync</h1>
+      <p>দ্বীন, স্বাস্থ্য ও সময়ের দৈনিক হিসাব</p>
+    </div>
+    <div class="date"><b id="date"></b><span id="time"></span></div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <div class="group">
+        <div class="label"><span>নামাজ</span><span id="namaz">০ / ৫</span></div>
+        <div class="prayers">
+          <label class="chip"><input type="checkbox" data-k="fajr"><span>ফজর</span></label>
+          <label class="chip"><input type="checkbox" data-k="dhuhr"><span>জোহর</span></label>
+          <label class="chip"><input type="checkbox" data-k="asr"><span>আসর</span></label>
+          <label class="chip"><input type="checkbox" data-k="maghrib"><span>মাগরিব</span></label>
+          <label class="chip"><input type="checkbox" data-k="isha"><span>এশা</span></label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="label"><span>জিকির ও ব্যায়াম</span></div>
+        <div class="habits">
+          <label class="chip"><input type="checkbox" data-k="dhikr"><span>৩০ মিনিট জিকির</span></label>
+          <label class="chip"><input type="checkbox" data-k="walk"><span>৩০ মিনিট হাঁটা</span></label>
+          <label class="chip"><input type="checkbox" data-k="workout"><span>৩০ মিনিট ওয়ার্কআউট</span></label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="label"><span>সময় (ঘণ্টা)</span></div>
+        <div class="hours">
+          <div><label for="prod">প্রোডাক্টিভ</label><input type="number" id="prod" min="0" max="24" step="0.5" value="6"></div>
+          <div><label for="sleep">ঘুম</label><input type="number" id="sleep" min="0" max="24" step="0.5" value="7"></div>
+          <div><label for="waste">অপচয়</label><input type="number" id="waste" min="0" max="24" step="0.5" value="2"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="label"><span>আজকের দান (টাকা)</span></div>
+        <div class="donate">
+          <span class="tk">৳</span>
+          <input type="number" id="donate" min="0" step="1" value="0" aria-label="আজকের দানের পরিমাণ">
+        </div>
+        <div class="quick" id="quick">
+          <button type="button" data-add="10">+১০</button>
+          <button type="button" data-add="20">+২০</button>
+          <button type="button" data-add="50">+৫০</button>
+          <button type="button" data-add="100">+১০০</button>
+          <button type="button" data-add="0">রিসেট</button>
+        </div>
+      </div>
+
+      <button id="save">আজকের রেকর্ড সেভ করুন</button>
+    </section>
+
+    <div class="stack">
+      <section class="card">
+        <div class="score">
+          <div class="ring">
+            <svg width="132" height="132" viewBox="0 0 132 132">
+              <circle class="track" cx="66" cy="66" r="58"></circle>
+              <circle class="bar" id="bar" cx="66" cy="66" r="58" stroke-dasharray="364.4" stroke-dashoffset="364.4"></circle>
+            </svg>
+            <div class="num" id="score">০</div>
+          </div>
+          <div class="facts">
+            <div><small>নামাজ</small><strong id="f-namaz">০/৫</strong></div>
+            <div><small>অভ্যাস</small><strong id="f-habit">০/৩</strong></div>
+            <div><small>প্রোডাক্টিভ</small><strong id="f-prod">০ ঘণ্টা</strong></div>
+            <div><small>অপচয়</small><strong id="f-waste">০ ঘণ্টা</strong></div>
+            <div><small>দান</small><strong id="f-donate">৳০</strong></div>
+          </div>
+        </div>
+        <p id="status">এখনও সেভ করা হয়নি</p>
+      </section>
+
+      <section class="card">
+        <h2>গত ৭ দিন (স্কোর)</h2>
+        <div id="week"></div>
+      </section>
+
+      <section class="card">
+        <h2>২৪ ঘণ্টার বণ্টন</h2>
+        <div id="split"></div>
+        <div class="legend" id="legend"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2>গত ৭ দিনের হিস্টরি</h2>
+    <div class="sum" id="sum"></div>
+    <div class="tw"><table id="hist"></table></div>
+  </section>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const bn = (n) => Number(n).toLocaleString('bn-BD');
+  // স্থানীয় তারিখ (UTC নয়) — যাতে রাত ১২টার পর সঠিক দিনে সেভ হয়
+  const keyOf = (d) => {
+    const p = (n) => String(n).padStart(2, '0');
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  };
+  const STORE = 'lifesync_v2';
+  const checks = [...document.querySelectorAll('input[type=checkbox]')];
+  const PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+  const HABITS = ['dhikr', 'walk', 'workout'];
+
+  let db = {};
+  try { db = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { db = {}; }
+
+  function tick() {
+    const now = new Date();
+    $('date').textContent = now.toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long' });
+    $('time').textContent = now.toLocaleTimeString('bn-BD');
+  }
+  setInterval(tick, 1000); tick();
+
+  function read() {
+    const v = { prayers: 0, habits: 0, checks: {} };
+    checks.forEach(c => (v.checks[c.dataset.k] = c.checked));
+    v.prayers = PRAYERS.filter(k => v.checks[k]).length;
+    v.habits = HABITS.filter(k => v.checks[k]).length;
+    v.prod = parseFloat($('prod').value) || 0;
+    v.sleep = parseFloat($('sleep').value) || 0;
+    v.waste = parseFloat($('waste').value) || 0;
+    v.donate = Math.max(0, parseFloat($('donate').value) || 0);
+    return v;
+  }
+
+  // নামাজ ৩৫ + অভ্যাস ১৫ + কাজ ৩৫ + ঘুম ১৫ − অপচয়ের জরিমানা (সর্বোচ্চ ১৫)
+  function score(v) {
+    const prayer = (v.prayers / 5) * 35;
+    const habit = (v.habits / 3) * 15;
+    const work = Math.min(v.prod / 8, 1) * 35;
+    const sleep = v.sleep >= 6 && v.sleep <= 8 ? 15 : 7;
+    const penalty = Math.min(v.waste * 3, 15);
+    return Math.max(0, Math.min(100, Math.round(prayer + habit + work + sleep - penalty)));
+  }
+
+  function render() {
+    const v = read(), s = score(v);
+    $('score').textContent = bn(s);
+    $('bar').style.strokeDashoffset = 364.4 * (1 - s / 100);
+    $('namaz').textContent = `${bn(v.prayers)} / ${bn(5)}`;
+    $('f-namaz').textContent = `${bn(v.prayers)}/${bn(5)}`;
+    $('f-habit').textContent = `${bn(v.habits)}/${bn(3)}`;
+    $('f-prod').textContent = `${bn(v.prod)} ঘণ্টা`;
+    $('f-waste').textContent = `${bn(v.waste)} ঘণ্টা`;
+    $('f-donate').textContent = `৳${bn(v.donate)}`;
+
+    const other = Math.max(0, 24 - v.prod - v.sleep - v.waste);
+    const parts = [
+      ['প্রোডাক্টিভ', v.prod, 'var(--blue)'],
+      ['ঘুম', v.sleep, 'var(--sleep)'],
+      ['অপচয়', v.waste, 'var(--rose)'],
+      ['অন্যান্য', other, 'var(--muted)']
+    ];
+    $('split').innerHTML = parts.map(p => `<div style="width:${(p[1] / 24) * 100}%;background:${p[2]}"></div>`).join('');
+    $('legend').innerHTML = parts.map(p => `<span style="--c:${p[2]}">${p[0]} · ${bn(p[1])} ঘণ্টা</span>`).join('');
+    drawWeek(s);
+    return s;
+  }
+
+  function drawWeek(liveScore) {
+    const today = new Date(), out = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      const saved = db[keyOf(d)];
+      const val = i === 0 ? (saved ? saved.score : liveScore) : (saved ? saved.score : 0);
+      const label = d.toLocaleDateString('bn-BD', { weekday: 'short' });
+      out.push(`<div class="col ${i === 0 ? 'today' : ''}"><em>${bn(val)}</em><i style="height:${val * 1.05}px"></i>${label}</div>`);
+    }
+    $('week').innerHTML = out.join('');
+  }
+
+  // ---------- গত ৭ দিনের হিস্টরি (সেভ করা তথ্য থেকে) ----------
+  function drawHistory() {
+    const today = new Date(), rows = [];
+    let days = 0, prodSum = 0, scoreSum = 0, donateSum = 0;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      const r = db[keyOf(d)];
+      const name = i === 0 ? 'আজ' : d.toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'short' });
+      if (r) {
+        days++; prodSum += r.prod || 0; scoreSum += r.score || 0; donateSum += r.donate || 0;
+        rows.push(`<tr class="${i === 0 ? 'today' : ''}"><td>${name}</td><td>${bn(r.score)}</td><td>${bn(r.prod)} ঘণ্টা</td><td>${bn(r.prayers)}/${bn(5)}</td><td>${bn(r.waste)} ঘণ্টা</td><td>৳${bn(r.donate || 0)}</td></tr>`);
+      } else {
+        rows.push(`<tr class="empty"><td>${name}</td><td colspan="5">তথ্য নেই</td></tr>`);
+      }
+    }
+    const avg = (n) => (days ? bn(Math.round((n / days) * 10) / 10) : bn(0));
+    $('sum').innerHTML =
+      `<div><small>গড় প্রোডাক্টিভিটি</small><strong>${avg(prodSum)} ঘণ্টা/দিন</strong></div>` +
+      `<div><small>গড় স্কোর</small><strong>${avg(scoreSum)}</strong></div>` +
+      `<div><small>মোট দান</small><strong>৳${bn(donateSum)}</strong></div>`;
+    $('hist').innerHTML =
+      '<tr><th>দিন</th><th>স্কোর</th><th>প্রোডাক্টিভ</th><th>নামাজ</th><th>অপচয়</th><th>দান</th></tr>' + rows.join('');
+  }
+
+  function toast(msg) {
+    const t = $('toast'); t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+  $('save').addEventListener('click', () => {
+    const v = read(), s = score(v);
+    db[keyOf(new Date())] = { score: s, ...v };
+    try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) {}
+    $('status').textContent = 'আজকের তথ্য সংরক্ষিত হয়েছে';
+    render(); drawHistory();
+    toast('সেভ হয়েছে। বারাকাল্লাহ!');
+  });
+
+  // দানের কুইক বাটন
+  $('quick').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const add = Number(b.dataset.add);
+    $('donate').value = add === 0 ? 0 : (parseFloat($('donate').value) || 0) + add;
+    render();
+  });
+
+  document.querySelectorAll('input').forEach(i => i.addEventListener('input', render));
+
+  (function init() {
+    const saved = db[keyOf(new Date())];
+    if (saved) {
+      checks.forEach(c => (c.checked = !!saved.checks[c.dataset.k]));
+      $('prod').value = saved.prod; $('sleep').value = saved.sleep; $('waste').value = saved.waste;
+      $('donate').value = saved.donate || 0;
+      $('status').textContent = 'আজকের তথ্য সংরক্ষিত হয়েছে';
+    }
+    render(); drawHistory();
+  })();
+</script>
+</body>
+</html>
