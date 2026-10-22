@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -22,19 +23,19 @@
   * { box-sizing: border-box; margin: 0; }
   body { font-family: "Hind Siliguri", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; padding: 24px 16px 48px; }
   .wrap { max-width: 920px; margin: 0 auto; }
-
+ 
   header { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
   h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.01em; }
   header p { color: var(--muted); font-size: .9rem; }
   .date { text-align: right; font-size: .9rem; color: var(--muted); }
   .date b { display: block; color: var(--ink); font-weight: 600; }
-
+ 
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
   .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
   .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
   @media (min-width: 800px) { .grid { grid-template-columns: 1.15fr 1fr; align-items: start; } }
   .stack { display: grid; gap: 16px; }
-
+ 
   .score { display: flex; align-items: center; gap: 22px; }
   .ring { position: relative; width: 132px; height: 132px; flex: none; }
   .ring svg { transform: rotate(-90deg); }
@@ -46,49 +47,49 @@
   .facts small { display: block; color: var(--muted); font-size: .78rem; }
   .facts strong { font-size: 1.15rem; font-weight: 600; }
   #status { margin-top: 14px; font-size: .85rem; color: var(--muted); }
-
+ 
   .group { margin-bottom: 22px; }
   .group:last-of-type { margin-bottom: 0; }
   .label { font-size: .85rem; color: var(--muted); margin-bottom: 10px; display: flex; justify-content: space-between; }
-
+ 
   .prayers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .chip { position: relative; }
   .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
   .chip span { display: block; text-align: center; padding: 12px 4px; font-size: .9rem; font-weight: 500; border: 1px solid var(--line); border-radius: 10px; transition: .15s; }
   .chip input:checked + span { background: var(--green); border-color: var(--green); color: var(--surface); }
   .chip input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
-
+ 
   .habits { display: grid; gap: 8px; }
   .habits .chip span { text-align: left; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; }
   .habits .chip span::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--muted); }
   .habits .chip input:checked + span::after { background: var(--surface); border-color: var(--surface); box-shadow: inset 0 0 0 3px var(--green); }
-
+ 
   .hours { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .hours label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 4px; }
   input[type=number] { width: 100%; padding: 10px 12px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
   input[type=number]:focus { outline: 2px solid var(--green); border-color: transparent; }
-
+ 
   /* দান */
   .donate { display: flex; align-items: center; gap: 10px; }
   .donate .tk { font-weight: 600; color: var(--gold); font-size: 1.1rem; }
   .quick { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
   .quick button { width: auto; margin: 0; padding: 5px 12px; font-size: .8rem; font-weight: 500; background: var(--green-soft); color: var(--green); border-radius: 8px; }
-
+ 
   button { width: 100%; margin-top: 24px; padding: 13px; font: inherit; font-weight: 600; cursor: pointer; background: var(--green); color: var(--surface); border: 0; border-radius: 10px; transition: opacity .15s; }
   button:hover { opacity: .9; }
   button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-
+ 
   #week { display: flex; align-items: end; gap: 10px; height: 150px; }
   .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: end; height: 100%; gap: 6px; font-size: .75rem; color: var(--muted); }
   .col i { display: block; width: 100%; max-width: 34px; border-radius: 6px 6px 0 0; background: var(--green-soft); min-height: 3px; }
   .col.today i { background: var(--green); }
   .col em { font-style: normal; color: var(--ink); font-weight: 600; }
-
+ 
   #split { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--line); }
   #split div { transition: width .4s ease; }
   .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-top: 14px; font-size: .85rem; }
   .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--c); }
-
+ 
   /* ৭ দিনের হিস্টরি */
   .sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
   .sum div { background: var(--bg); border-radius: 10px; padding: 10px 12px; }
@@ -101,7 +102,15 @@
   td:first-child, th:first-child { text-align: left; }
   tr.empty td { color: var(--muted); }
   tr.today td:first-child { color: var(--green); font-weight: 600; }
-
+ 
+  /* ফুটার */
+  footer { margin-top: 36px; text-align: center; color: var(--muted); font-size: .85rem; }
+  footer::before { content: ""; display: block; width: 48px; height: 2px; margin: 0 auto 18px; border-radius: 2px; background: var(--gold); }
+  footer .made { font-size: .8rem; letter-spacing: .02em; }
+  footer .name { display: block; margin: 2px 0 6px; font-size: 1.15rem; font-weight: 700; color: var(--green); }
+  footer .uni { display: inline-block; padding: 4px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: .8rem; }
+  footer .uni b { color: var(--gold); font-weight: 600; }
+ 
   #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 10px; font-size: .9rem; transition: .25s; }
   #toast.show { opacity: 1; transform: translate(-50%, 0); }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -109,7 +118,7 @@
 </head>
 <body>
 <div class="wrap">
-
+ 
   <header>
     <div>
       <h1>LifeSync</h1>
@@ -117,7 +126,7 @@
     </div>
     <div class="date"><b id="date"></b><span id="time"></span></div>
   </header>
-
+ 
   <div class="grid">
     <section class="card">
       <div class="group">
@@ -130,7 +139,7 @@
           <label class="chip"><input type="checkbox" data-k="isha"><span>এশা</span></label>
         </div>
       </div>
-
+ 
       <div class="group">
         <div class="label"><span>জিকির ও ব্যায়াম</span></div>
         <div class="habits">
@@ -139,7 +148,7 @@
           <label class="chip"><input type="checkbox" data-k="workout"><span>৩০ মিনিট ওয়ার্কআউট</span></label>
         </div>
       </div>
-
+ 
       <div class="group">
         <div class="label"><span>সময় (ঘণ্টা)</span></div>
         <div class="hours">
@@ -148,7 +157,7 @@
           <div><label for="waste">অপচয়</label><input type="number" id="waste" min="0" max="24" step="0.5" value="2"></div>
         </div>
       </div>
-
+ 
       <div class="group">
         <div class="label"><span>আজকের দান (টাকা)</span></div>
         <div class="donate">
@@ -163,10 +172,10 @@
           <button type="button" data-add="0">রিসেট</button>
         </div>
       </div>
-
+ 
       <button id="save">আজকের রেকর্ড সেভ করুন</button>
     </section>
-
+ 
     <div class="stack">
       <section class="card">
         <div class="score">
@@ -187,12 +196,12 @@
         </div>
         <p id="status">এখনও সেভ করা হয়নি</p>
       </section>
-
+ 
       <section class="card">
         <h2>গত ৭ দিন (স্কোর)</h2>
         <div id="week"></div>
       </section>
-
+ 
       <section class="card">
         <h2>২৪ ঘণ্টার বণ্টন</h2>
         <div id="split"></div>
@@ -200,15 +209,21 @@
       </section>
     </div>
   </div>
-
+ 
   <section class="card" style="margin-top:16px">
     <h2>গত ৭ দিনের হিস্টরি</h2>
     <div class="sum" id="sum"></div>
     <div class="tw"><table id="hist"></table></div>
   </section>
+ 
+  <footer>
+    <span class="made">তৈরি করেছেন</span>
+    <span class="name">মিনহাজ উদ্দিন সানিম</span>
+    <span class="uni">ইন্টারন্যাশনাল ইসলামিক ইউনিভার্সিটি চট্টগ্রাম · <b>IIUC</b>-এর শিক্ষার্থী</span>
+  </footer>
 </div>
 <div id="toast" role="status"></div>
-
+ 
 <script>
   const $ = (id) => document.getElementById(id);
   const bn = (n) => Number(n).toLocaleString('bn-BD');
@@ -221,17 +236,17 @@
   const checks = [...document.querySelectorAll('input[type=checkbox]')];
   const PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
   const HABITS = ['dhikr', 'walk', 'workout'];
-
+ 
   let db = {};
   try { db = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { db = {}; }
-
+ 
   function tick() {
     const now = new Date();
     $('date').textContent = now.toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long' });
     $('time').textContent = now.toLocaleTimeString('bn-BD');
   }
   setInterval(tick, 1000); tick();
-
+ 
   function read() {
     const v = { prayers: 0, habits: 0, checks: {} };
     checks.forEach(c => (v.checks[c.dataset.k] = c.checked));
@@ -243,7 +258,7 @@
     v.donate = Math.max(0, parseFloat($('donate').value) || 0);
     return v;
   }
-
+ 
   // নামাজ ৩৫ + অভ্যাস ১৫ + কাজ ৩৫ + ঘুম ১৫ − অপচয়ের জরিমানা (সর্বোচ্চ ১৫)
   function score(v) {
     const prayer = (v.prayers / 5) * 35;
@@ -253,7 +268,7 @@
     const penalty = Math.min(v.waste * 3, 15);
     return Math.max(0, Math.min(100, Math.round(prayer + habit + work + sleep - penalty)));
   }
-
+ 
   function render() {
     const v = read(), s = score(v);
     $('score').textContent = bn(s);
@@ -264,7 +279,7 @@
     $('f-prod').textContent = `${bn(v.prod)} ঘণ্টা`;
     $('f-waste').textContent = `${bn(v.waste)} ঘণ্টা`;
     $('f-donate').textContent = `৳${bn(v.donate)}`;
-
+ 
     const other = Math.max(0, 24 - v.prod - v.sleep - v.waste);
     const parts = [
       ['প্রোডাক্টিভ', v.prod, 'var(--blue)'],
@@ -277,7 +292,7 @@
     drawWeek(s);
     return s;
   }
-
+ 
   function drawWeek(liveScore) {
     const today = new Date(), out = [];
     for (let i = 6; i >= 0; i--) {
@@ -289,7 +304,7 @@
     }
     $('week').innerHTML = out.join('');
   }
-
+ 
   // ---------- গত ৭ দিনের হিস্টরি (সেভ করা তথ্য থেকে) ----------
   function drawHistory() {
     const today = new Date(), rows = [];
@@ -313,7 +328,7 @@
     $('hist').innerHTML =
       '<tr><th>দিন</th><th>স্কোর</th><th>প্রোডাক্টিভ</th><th>নামাজ</th><th>অপচয়</th><th>দান</th></tr>' + rows.join('');
   }
-
+ 
   function toast(msg) {
     const t = $('toast'); t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2200);
@@ -326,7 +341,7 @@
     render(); drawHistory();
     toast('সেভ হয়েছে। বারাকাল্লাহ!');
   });
-
+ 
   // দানের কুইক বাটন
   $('quick').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
@@ -334,9 +349,9 @@
     $('donate').value = add === 0 ? 0 : (parseFloat($('donate').value) || 0) + add;
     render();
   });
-
+ 
   document.querySelectorAll('input').forEach(i => i.addEventListener('input', render));
-
+ 
   (function init() {
     const saved = db[keyOf(new Date())];
     if (saved) {
